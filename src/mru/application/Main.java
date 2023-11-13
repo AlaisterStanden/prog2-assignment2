@@ -9,7 +9,7 @@ public class Main {
 		StoreManager store = new StoreManager();
 		try {
 			store.loadData();
-			store.lauch();
+			store.launch();
 			store.Save();		
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

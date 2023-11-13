@@ -195,7 +195,7 @@ public class AppMenu {
 		System.out.print("This Item Found:\n");
 		System.out.print(t.formatToScreen());
 		while (true){
-			System.out.print("\nDo you want to remove it (Y/N)?");
+			System.out.print("\n Do you want to remove it (Y/N)?");
 			String option = input.next().toLowerCase();
 			if (option.equals("y") || option.equals("n")){
 				return option;
@@ -332,7 +332,7 @@ public class AppMenu {
 			input.nextLine();
 		}
 		public void purchaseComplete() {
-			System.out.println("The Transaction Successfully Compleated!\n");
+			System.out.println("The Transaction Successfully Completed!\n");
 			System.out.println("Press Enter to continue...");
 			input.nextLine();
 			input.nextLine();

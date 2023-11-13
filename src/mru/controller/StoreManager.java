@@ -2,6 +2,7 @@ package mru.controller;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -18,7 +19,7 @@ import mru.view.AppMenu;
 public class StoreManager {
 	public ArrayList <Toy> listOfToys; // list of all toys in the store
 	AppMenu appMen; // menu interface
-	private final String FILE_PATH = "prog2-assignment2/src/res/toys.txt"; // file path for storing toy data
+	private final String FILE_PATH = "res/toys.txt"; // file path for storing toy data
 	
 	/**
 	 * Creates a new StoreManager object with a new instance of the AppMenu class.
@@ -32,15 +33,15 @@ public class StoreManager {
 	 * @throws Exception if there is an error while reading from the file.
 	 */
 	public void loadData() throws Exception {
-		listOfToys = new ArrayList<>(); // initialize list of toys
-		File info = new File(FILE_PATH); // create file object
-		String currentLine;
-		String[] splittedLine;
-		if(info.exists()) { // check if file exists
-			Scanner fileReader = new Scanner(info); // create file reader object
-			while (fileReader.hasNextLine()){ // loop through file
-				currentLine = fileReader.nextLine(); // read a line
-				splittedLine = currentLine.split(";"); // split the line by semicolon
+	    listOfToys = new ArrayList<>(); // initialize list of toys
+	    File info = new File(FILE_PATH); // create file object
+	    String currentLine;
+	    String[] splittedLine;
+	    if(info.exists()) { // check if file exists
+	        Scanner fileReader = new Scanner(info); // create file reader object
+	        while (fileReader.hasNextLine()){ // loop through file
+	            currentLine = fileReader.nextLine(); // read a line
+	            splittedLine = currentLine.split(";"); 
 				String SerialNumber = splittedLine[0];
 				char firstchar = SerialNumber.charAt(0);
 				if (firstchar == '0' || firstchar == '1') { // if toy is a figure
@@ -94,7 +95,7 @@ public class StoreManager {
 		
 	}
 
-	public void lauch() throws FileNotFoundException{
+	public void launch() throws FileNotFoundException{
 		boolean flag = true;
 		int option;
 		while(flag){
@@ -103,11 +104,14 @@ public class StoreManager {
 			case 1 :
 				searchAndPurchase();
 				break;
-			case 2 :
-				Toy t = appMen.addnewtoy();
-				addNewToy(t);
-				appMen.ToyAddedMessgae();
-				break;
+			case 2:
+			    Toy t = appMen.addnewtoy();
+			    if (t != null) { // Only add the new toy if it's not null
+			        addNewToy(t);
+			        appMen.ToyAddedMessgae();
+			    }
+			    break; // This ensures that the break is hit regardless of the if condition
+
 			case 3 :
 				String rem = appMen.removetoy();
 				removeAToy(rem);
@@ -224,8 +228,18 @@ public class StoreManager {
 	}
 
 	public void addNewToy(Toy newToy){
-		listOfToys.add(newToy);
+	    // Check if the toy with the same serial number already exists in the list
+	    for (Toy toy : listOfToys) {
+	        if (toy.getSerialNumber().equals(newToy.getSerialNumber())) {
+	            System.out.println("A toy with this serial number already exists! Try again.");
+	            return; // Exit the method if a toy with the same serial number is found
+	        }
+	    }
+	    // If no toy with the same serial number exists, add the new toy to the list
+	    listOfToys.add(newToy);
 	}
+
+	
 	
 	public void removeAToy(String serialNumber) {
 		for (Toy t:listOfToys) {
